@@ -1,30 +1,45 @@
-# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
-# For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
+name: pp-web
 
-name: pp-deploy
 on:
   push:
     branches:
-      - main  # 修改为你的主分支名称，比如master或main
+      # 触发ci/cd的代码分支
+      - main
 
 jobs:
-  publish-npm:
+  build:
+    # 指定操作系统
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      # 将代码拉到虚拟机
+      - name: 获取源码 🛎️
         uses: actions/checkout@v2
- 
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
+      # 指定node版本
+      - name: Node环境版本 🗜️
+        uses: actions/setup-node@v3
         with:
-          node-version: '20'  # 使用你需要的Node.js版本
-          registry-url: 'https://npm.pkg.github.com/'  # 设置GitHub Packages的注册表URL
-          scope: '@your-org-or-username'  # 指定作用域，如果你的包名是@your-org/package，则需要此处设置@your-org
- 
-      - name: Install dependencies
-        run: npm ci
- 
-      - name: Publish package
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+      # 依赖缓存策略
+      - name: Npm缓存 📁
+        id: cache-dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            **/node_modules
+          key: ${{runner.OS}}-${{hashFiles('**/package-lock.json')}}
+      # 依赖下载
+      - name: 安装依赖 📦
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: npm install
+      # 打包
+      - name: 打包 🏗️
+        run: npm run build
+      # 测试
+      - name: 测试 💣
+        run: npm run start
+      # 发布
+      - name: 发布 🚀
         run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 使用GitHub的内置token来认证
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
