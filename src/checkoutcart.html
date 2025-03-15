@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="styles.css" />
+
+<!--  <script-->
+<!--  src=clientId-->
+<!--  data-sdk-client-token=clientToken-->
+<!--  data-sdk-integration-source="developer-studio"-->
+<!--  defer-->
+<!--&gt;</script>-->
+
+  <!-- Uncomment to inject from server side -->
+   {{&prerequisiteScripts}}
+  <script src="init-fastlane.js" defer></script>
+  <!-- <script
+            src="https://www.paypal.com/sdk/js?client-id=AZYsBF1rUMiG3oDkGV5bb0HpPwuM6NXH8DYsSnbEcmqZNE9dj2P_L8_k6K5RyI5DEor7nxjtegNbfnVw&buyer-country=US&currency=USD&components=buttons%2Cfastlane,card-fields&enable-funding=venmo,paylater,card"
+            data-sdk-client-token="eyJraWQiOiJkMTA2ZTUwNjkzOWYxMWVlYjlkMTAyNDJhYzEyMDAwMiIsInR5cCI6IkpXVCIsImFsZyI6IkVTMjU2In0.eyJpc3MiOiJodHRwczovL2FwaS5zYW5kYm94LnBheXBhbC5jb20iLCJhdWQiOlsiaHR0cHM6Ly9hcGkuYnJhaW50cmVlZ2F0ZXdheS5jb20iLCJleGFtcGxlLmNvbSJdLCJzdWIiOiJaNTlZUTQ0RFpGVTdZIiwiYWNyIjpbImNsaWVudCJdLCJzY29wZSI6WyJCcmFpbnRyZWU6VmF1bHQiXSwib3B0aW9ucyI6e30sImF6IjoiY2NnMTguc2xjIiwiZXh0ZXJuYWxfaWQiOlsiUGF5UGFsOlo1OVlRNDREWkZVN1kiLCJCcmFpbnRyZWU6OGJ6aGprbXluN2NtbW54ZCJdLCJleHAiOjE3Mzk2Mjk5NjAsImlhdCI6MTczOTYyOTA2MCwianRpIjoiVTJBQUo4emVpRG5QNXA0UzNkeTFxYVpEclVkUTlaT2h0ZXVEWF91SGtXdUhwUlFOX2pZQ1dENnFIS1lMNkVSUVZtUFZqYWJpS1c0MTlBeUdYbU9fZ3F0R0FmVW5VVGFTYjBsZ3E1d2ZmSS1BMS1jRTlOdGI3Rm56bFNxN3ZVeGcifQ.dFrLUHO8RAFg-Jch7PI0d6vZYpoSsCY2mrTQW5VGpDBsEVHxgjN7hTj-1xKwnzn--Srh8WwfMKqRYUSW6SkWjA"
+            data-sdk-integration-source="developer-studio"
+        ></script> -->
+        <script
+          src="https://www.sandbox.paypal.com/sdk/js?client-id=AZYsBF1rUMiG3oDkGV5bb0HpPwuM6NXH8DYsSnbEcmqZNE9dj2P_L8_k6K5RyI5DEor7nxjtegNbfnVw&buyer-country=US&currency=USD&components=buttons,card-fields&enable-funding=venmo"
+          data-sdk-client-token="eyJraWQiOiJkMTA2ZTUwNjkzOWYxMWVlYjlkMTAyNDJhYzEyMDAwMiIsInR5cCI6IkpXVCIsImFsZyI6IkVTMjU2In0.eyJpc3MiOiJodHRwczovL2FwaS5zYW5kYm94LnBheXBhbC5jb20iLCJhdWQiOlsiaHR0cHM6Ly9hcGkuYnJhaW50cmVlZ2F0ZXdheS5jb20iLCJleGFtcGxlLmNvbSJdLCJzdWIiOiJaNTlZUTQ0RFpGVTdZIiwiYWNyIjpbImNsaWVudCJdLCJzY29wZSI6WyJCcmFpbnRyZWU6VmF1bHQiXSwib3B0aW9ucyI6e30sImF6IjoiY2NnMTguc2xjIiwiZXh0ZXJuYWxfaWQiOlsiUGF5UGFsOlo1OVlRNDREWkZVN1kiLCJCcmFpbnRyZWU6OGJ6aGprbXluN2NtbW54ZCJdLCJleHAiOjE3Mzk2Mjk5NjAsImlhdCI6MTczOTYyOTA2MCwianRpIjoiVTJBQUo4emVpRG5QNXA0UzNkeTFxYVpEclVkUTlaT2h0ZXVEWF91SGtXdUhwUlFOX2pZQ1dENnFIS1lMNkVSUVZtUFZqYWJpS1c0MTlBeUdYbU9fZ3F0R0FmVW5VVGFTYjBsZ3E1d2ZmSS1BMS1jRTlOdGI3Rm56bFNxN3ZVeGcifQ.dFrLUHO8RAFg-Jch7PI0d6vZYpoSsCY2mrTQW5VGpDBsEVHxgjN7hTj-1xKwnzn--Srh8WwfMKqRYUSW6SkWjA"
+            data-sdk-integration-source="developer-studio"
+        ></script>
+        <script>
+          window.onload = function () {
+              var number = document.getElementById('input').value;
+              var totalValue = "$"+number * 100;
+              document.getElementById('total').innerHTML = totalValue;
+              document.getElementById('subtotal').innerHTML = totalValue;
+          }
+          
+          function shouwDialog() {
+              var dialog = document.getElementById('payCard');
+              dialog.showModal();
+          }
+          function getClientToken() {
+              getToken();
+          }
+          function openCart() {
+              alert('open cart');
+              window.location.href = 'cart.html';
+          }
+          function onchangeInput(valie) {
+              // alert(valie);   
+              var totalValue="$"+valie*100;
+              document.getElementById('total').innerHTML = totalValue;
+              document.getElementById('subtotal').innerHTML = totalValue;
+          }
+          function lookup() {
+              checkEmail1();
+          }
+      </script>
+        <style>
+          .grid-container {
+            display: grid;
+            align-items: right;
+            grid-template-columns: repeat(2,600px); /* 两列，每列宽度100px */
+            gap: 50px; /* 可选，设置网格项之间的间隔 */
+            justify-content: center;/*  可选，设置网格项在主轴上的对齐方式 */
+            /* align-items: center; 可选，设置网格项在交叉轴上的对齐方式 */
+          }
+          .grid-container div {
+            text-align: center;
+          }
+          .table-div {
+              display: block;
+              text-align: left !important;
+              width: 80%;
+              margin: 0 auto;
+              margin-top: 50px;
+              margin-bottom: 20px;
+          }
+          .left-div {
+              display: block;
+              text-align: right !important;
+              width: 20%;
+              margin-bottom: 20px;
+          }
+          .right-div {
+              display: block;
+              text-align: right !important;
+              width: 20%;
+              margin-bottom: 20px;
+          }
+          .left1-div {
+              display: block;
+              text-align: right !important;
+              width: 100%;
+              margin-bottom: 20px;
+          }
+          .bold-text {
+              font-weight: bold;
+              font-size: 20px;
+          }
+          .bg-gray-300 {
+              --tw-bg-opacity: 1;
+              background-color: rgb(209 213 219 / 1);
+              background-color: rgb(209 213 219 / var(--tw-bg-opacity, 1));
+          }
+          .rounded-full {
+              border-radius: 9999px;
+              margin-right: 0.5rem;
+              padding-top: 0.5rem;
+              padding-bottom: 0.5rem;
+              width: auto;
+          }
+          li {
+              float: left;
+              list-style: none;
+              border: 1px solid #504d4d;
+          }
+          .bg-blue {
+              width: 4rem;
+              height: 4rem;
+              top: 2rem;
+              right: 2rem;
+              position: absolute;
+              box-sizing: inherit;
+              padding: 0.5rem;
+              padding-left: 0.5rem;
+              background-color: rgb(59 130 246 / 0.5);
+          }
+          .button {
+              width: 300px;
+              height: 40px;
+              background-color: #ffc439;
+          }
+          .button1 {
+              width: 300px;
+              height: 40px;
+              color: #ffffff;
+              background-color: #003087;
+          }
+          .fieldset {
+              border: none;
+              display: flex;
+              flex-direction: column;
+              gap: 16px;
+              margin: 16px 0;
+              padding: 0;
+          }
+          .input1 {
+              width: 300px !important;
+              height: 30px;
+          }
+        </style>
+</head>
+
+  <body>
+    <div class="table-div">
+      <table style="width: 100%;">
+       <tr style="text-align: center;background-color: #918f8f;">
+         <th >ITEMS</th>
+         <th style="width: 30%;">DETAILS</th>
+         <th>PRICE</th>
+         <th>QUANTITY</th>
+         <th>TOTAL</th>
+       </tr>
+       <tr style="border-bottom: 2px solid #918f8f;">
+         <td style="text-align: center;border-bottom: 1px solid #918f8f;"><img src="./image/mockup-5206355_960_720.jpg" width="80px" height="80px" alt="Product Image"></td>
+         <td style="border-bottom: 1px solid #918f8f;">Children, toddlers and babies wear should be functional (easy to put on), cute (colors), gentle and smooth (quality of fabrics), easy to maintain (care label, dimensional stability, etc), and have a good ratio of price to quality.</td>
+         <td style="text-align: center ;border-bottom: 1px solid #918f8f;">$100</td>
+         <td style="text-align: center;border-bottom: 1px solid #918f8f;"><input id="input" type="number" value="1" min="1" max="10" onchange="onchangeInput(this.value)"/></td>
+         <td id="total" style="text-align: center ;border-bottom: 1px solid #918f8f;">$100</td>
+       </tr>
+       <tr >
+           <td colspan="4" style="text-align: right;">SUBTOTAL:</td>
+           <td id="subtotal" style="text-align: center ;">$100</td>
+       </tr>
+      </table>
+   </div>
+   
+    <div style="display: grid; grid-template-columns: 70% 30%;">
+    <form>
+        <div  class="left1-div">
+          <h1>Fastlane - PayPal Integration</h1>
+
+          <section id="customer" class="active visited">
+            <div class="header">
+              <h2>Customer</h2>
+              <button id="email-edit-button" type="button" class="edit-button">Edit</button>
+            </div>
+            <div class="summary"></div>
+            <div class="email-container">
+              <fieldset class="email-input-with-watermark">
+                <input id="email-input" name="email" type="email" placeholder="Email" autocomplete="email" />
+                <div id="watermark-container"></div>
+              </fieldset>
+              <button id="email-submit-button" type="button" class="submit-button" disabled>Continue</button>
+            </div>
+          </section>
+          
+          <hr />
+          
+          <section id="shipping">
+                <div class="header">
+                <h2>Shipping</h2>
+                <button id="shipping-edit-button" type="button" class="edit-button">Edit</button>
+                </div>
+                <div class="summary"></div>
+                <fieldset>
+                <span>
+                    <input id="shipping-required-checkbox" name="shipping-required" type="checkbox" checked />
+                    <label for="shipping-required-checkbox">This purchase requires shipping</label>
+                </span>
+                <input name="given-name" placeholder="First name" autocomplete="given-name" />
+                <input name="family-name" placeholder="Last name" autocomplete="family-name" />
+                <input name="address-line1" placeholder="Street address" autocomplete="address-line1" />
+                <input name="address-line2" placeholder="Apt., ste., bldg. (optional)" autocomplete="address-line2" />
+                <input name="address-level2" placeholder="City" autocomplete="address-level2" />
+                <input name="address-level1" placeholder="State" autocomplete="address-level1" />
+                <input name="postal-code" placeholder="ZIP code" autocomplete="postal-code" />
+                <input name="country" placeholder="Country" autocomplete="country" />
+                <input name="tel-country-code" placeholder="Country calling code" autocomplete="tel-country-code" />
+                <input name="tel-national" type="tel" placeholder="Phone number" autocomplete="tel-national" />
+                </fieldset>
+                <button id="shipping-submit-button" type="button" class="submit-button">Continue</button></section>
+
+          <hr />
+
+          <section id="payment">
+            <div class="header">
+              <h2>Payment</h2>
+              <button id="payment-edit-button" type="button" class="edit-button">Edit</button>
+            </div>
+            <fieldset>
+              <div id="payment-component"></div>
+            </fieldset>
+          </section>
+
+          <button id="checkout-button" type="button" class="submit-button">Checkout</button>
+          </div>
+        </form>  
+        <div  class="left-div">
+            <div id="paypal-button-container" style="width: 300px;"></div>
+            <br />
+            <div class="left-div" ><button class="button" onclick="shouwDialog()">Pay By Card</button></div>
+        </div>
+      </div>
+      
+   
+    
+  <dialog id="payCard">
+    <div id="card-name-field-container"></div>
+    <div id="card-number-field-container"></div>
+    <div id="card-expiry-field-container"></div>
+    <div id="card-cvv-field-container"></div>
+
+    
+    <div>
+        <label for="card-billing-address-line-1">Billing Address</label>
+        <input
+            type="text"
+            id="card-billing-address-line-1"
+            name="card-billing-address-line-1"
+            autocomplete="off"
+            placeholder="Address line 1"
+        />
+    </div>
+    <div>
+        <input
+            type="text"
+            id="card-billing-address-line-2"
+            name="card-billing-address-line-2"
+            autocomplete="off"
+            placeholder="Address line 2"
+        />
+    </div>
+    <div>
+        <input
+            type="text"
+            id="card-billing-address-admin-area-line-1"
+            name="card-billing-address-admin-area-line-1"
+            autocomplete="off"
+            placeholder="Admin area line 1"
+        />
+    </div>
+    <div>
+        <input
+            type="text"
+            id="card-billing-address-admin-area-line-2"
+            name="card-billing-address-admin-area-line-2"
+            autocomplete="off"
+            placeholder="Admin area line 2"
+        />
+    </div>
+    <div>
+        <input
+            type="text"
+            id="card-billing-address-country-code"
+            name="card-billing-address-country-code"
+            autocomplete="off"
+            placeholder="Country code"
+        />
+    </div>
+    <div>
+        <input
+            type="text"
+            id="card-billing-address-postal-code"
+            name="card-billing-address-postal-code"
+            autocomplete="off"
+            placeholder="Postal/zip code"
+        />
+    </div>
+    <br /><br />
+    <button id="card-field-submit-button" type="button">
+        Pay now with Card
+    </button>
+    <button onclick="payCard.close()">cancel</button>
+</dialog>
+    <script src="app.js"></script>
+  </body>
+</html>

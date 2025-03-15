@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://www.paypalobjects.com/webstatic/en_US/developer/docs/css/cardfields.css"
+        />
+        <title>PayPal JS SDK Advanced Integration - Checkout Flow</title>
+        <script
+            src="https://www.paypal.com/sdk/js?client-id=AZYsBF1rUMiG3oDkGV5bb0HpPwuM6NXH8DYsSnbEcmqZNE9dj2P_L8_k6K5RyI5DEor7nxjtegNbfnVw&buyer-country=US&currency=USD&components=buttons,card-fields&enable-funding=paylater,card"
+            data-sdk-integration-source="developer-studio"
+        ></script>
+        <script>
+            window.onload = function () {
+                var number = document.getElementById('input').value;
+                var totalValue = "$"+number * 100;
+                document.getElementById('total').innerHTML = totalValue;
+                document.getElementById('subtotal').innerHTML = totalValue;
+            }
+            
+            function shouwDialog() {
+                var dialog = document.getElementById('payCard');
+                dialog.showModal();
+            }
+            function getClientToken() {
+                getToken();
+            }
+            function openCart() {
+                alert('open cart');
+                window.location.href = 'cart.html';
+            }
+            function onchangeInput(valie) {
+                // alert(valie);   
+                var totalValue="$"+valie*100;
+                document.getElementById('total').innerHTML = totalValue;
+                document.getElementById('subtotal').innerHTML = totalValue;
+            }
+        </script>
+        <!-- <script defer="" src="bundle.js"></script> -->
+        <!-- <script
+  src="https://www.sandbox.paypal.com/sdk/js?client-id=AZYsBF1rUMiG3oDkGV5bb0HpPwuM6NXH8DYsSnbEcmqZNE9dj2P_L8_k6K5RyI5DEor7nxjtegNbfnVw&components=buttons%2Cfastlane"
+  data-sdk-client-token="eyJraWQiOiJkMTA2ZTUwNjkzOWYxMWVlYjlkMTAyNDJhYzEyMDAwMiIsInR5cCI6IkpXVCIsImFsZyI6IkVTMjU2In0.eyJpc3MiOiJodHRwczovL2FwaS5zYW5kYm94LnBheXBhbC5jb20iLCJzdWIiOiJaNTlZUTQ0RFpGVTdZIiwiYWNyIjpbImNsaWVudCJdLCJzY29wZSI6WyJCcmFpbnRyZWU6VmF1bHQiXSwib3B0aW9ucyI6e30sImF6IjoiY2NnMTguc2xjIiwiZXh0ZXJuYWxfaWQiOlsiUGF5UGFsOlo1OVlRNDREWkZVN1kiLCJCcmFpbnRyZWU6OGJ6aGprbXluN2NtbW54ZCJdLCJleHAiOjE3Mzg1OTQ2NzcsImlhdCI6MTczODU5Mzc3NywianRpIjoiVTJBQUxsSXBLSmtpakJyLUVMVUJSVE9rb2F2aHRzZmp6WHBLN21GdG5heTF2OVlXWXFkc2k0akhuS1AwS1JpWlkzUldBNFp2M2wyLWpjNTM4YjVXVUZSb3g2Q1U1WWthal9ZdDlSSENTcUNTdDVLSGtTRWNCWWZ1anI5OHFMZlEifQ.Ayf8LVHKa18xdrqHg__A2oj6lZBgFlX0KmKgW7yyMN-Z--KfohXAvCDtTETKDlC0rR10woc3Ftek2U3kI2XcIw"
+  data-sdk-integration-source="developer-studio"
+  defer
+></script> -->
+<style>
+    .grid-container {
+      display: grid;
+      align-items: right;
+      grid-template-columns: repeat(2, 50px); /* 两列，每列宽度100px */
+      gap: 200px; /* 可选，设置网格项之间的间隔 */
+      justify-content: center;/*  可选，设置网格项在主轴上的对齐方式 */
+      /* align-items: center; 可选，设置网格项在交叉轴上的对齐方式 */
+    }
+    .grid-container div {
+      text-align: center;
+    }
+    .table-div {
+        display: block;
+        text-align: left !important;
+        width: 80%;
+        margin: 0 auto;
+        margin-top: 50px;
+        margin-bottom: 20px;
+    }
+    .left-div {
+        display: block;
+        text-align: right !important;
+        width: 60%;
+        margin-bottom: 20px;
+    }
+    .bold-text {
+        font-weight: bold;
+        font-size: 20px;
+    }
+    .bg-gray-300 {
+        --tw-bg-opacity: 1;
+        background-color: rgb(209 213 219 / 1);
+        background-color: rgb(209 213 219 / var(--tw-bg-opacity, 1));
+    }
+    .rounded-full {
+        border-radius: 9999px;
+        margin-right: 0.5rem;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        width: auto;
+    }
+    li {
+        float: left;
+        list-style: none;
+        border: 1px solid #504d4d;
+    }
+    .bg-blue {
+        width: 4rem;
+        height: 4rem;
+        top: 2rem;
+        right: 2rem;
+        position: absolute;
+        box-sizing: inherit;
+        padding: 0.5rem;
+        padding-left: 0.5rem;
+        background-color: rgb(59 130 246 / 0.5);
+    }
+    .button {
+        width: 200px;
+        height: 40px;
+        background-color: #ffc439;
+    }
+  </style>
+ </head>
+ <body>
+    <div class="table-div">
+       <table style="width: 100%;">
+        <tr style="text-align: center;background-color: #918f8f;">
+          <th >ITEMS</th>
+          <th style="width: 30%;">DETAILS</th>
+          <th>PRICE</th>
+          <th>QUANTITY</th>
+          <th>TOTAL</th>
+        </tr>
+        <tr style="border-bottom: 2px solid #918f8f;">
+          <td style="text-align: center;border-bottom: 1px solid #918f8f;"><img src="./image/mockup-5206355_960_720.jpg" width="80px" height="80px" alt="Product Image"></td>
+          <td style="border-bottom: 1px solid #918f8f;">Children, toddlers and babies wear should be functional (easy to put on), cute (colors), gentle and smooth (quality of fabrics), easy to maintain (care label, dimensional stability, etc), and have a good ratio of price to quality.</td>
+          <td style="text-align: center ;border-bottom: 1px solid #918f8f;">$100</td>
+          <td style="text-align: center;border-bottom: 1px solid #918f8f;"><input id="input" type="number" value="1" min="1" max="10" onchange="onchangeInput(this.value)"/></td>
+          <td id="total" style="text-align: center ;border-bottom: 1px solid #918f8f;">$100</td>
+        </tr>
+        <tr >
+            <td colspan="4" style="text-align: right;">SUBTOTAL:</td>
+            <td id="subtotal" style="text-align: center ;">$100</td>
+        </tr>
+       </table>
+    </div>
+
+    <div id="root" class="grid-container">
+            <div  class="left-div">
+                <div id="paypal-button-container" style="width: 200px;"></div>
+                
+            </div>
+            <div  class="left-div">
+                <br />
+                <div class="left-div" ><button class="button" onclick="shouwDialog()">Pay By Card</button></div>
+                <div class="left-div" ><button class="button" onclick="getClientToken()">FastLane</button></div>
+            </div>
+    </div>
+    <!-- <div id="buttons-container" class="buttons-container"></div> -->
+    <!-- <div id="paypal-button-container" style="width: 300px;"></div> -->
+    <!-- Containers for Card Fields hosted by PayPal -->
+    <!-- <div id="card-form" class="card_container"> -->
+        
+    </div>
+    <p id="result-message"></p>
+ 
+    <dialog id="payCard">
+        <div id="card-name-field-container"></div>
+        <div id="card-number-field-container"></div>
+        <div id="card-expiry-field-container"></div>
+        <div id="card-cvv-field-container"></div>
+
+        
+        <div>
+            <label for="card-billing-address-line-1">Billing Address</label>
+            <input
+                type="text"
+                id="card-billing-address-line-1"
+                name="card-billing-address-line-1"
+                autocomplete="off"
+                placeholder="Address line 1"
+            />
+        </div>
+        <div>
+            <input
+                type="text"
+                id="card-billing-address-line-2"
+                name="card-billing-address-line-2"
+                autocomplete="off"
+                placeholder="Address line 2"
+            />
+        </div>
+        <div>
+            <input
+                type="text"
+                id="card-billing-address-admin-area-line-1"
+                name="card-billing-address-admin-area-line-1"
+                autocomplete="off"
+                placeholder="Admin area line 1"
+            />
+        </div>
+        <div>
+            <input
+                type="text"
+                id="card-billing-address-admin-area-line-2"
+                name="card-billing-address-admin-area-line-2"
+                autocomplete="off"
+                placeholder="Admin area line 2"
+            />
+        </div>
+        <div>
+            <input
+                type="text"
+                id="card-billing-address-country-code"
+                name="card-billing-address-country-code"
+                autocomplete="off"
+                placeholder="Country code"
+            />
+        </div>
+        <div>
+            <input
+                type="text"
+                id="card-billing-address-postal-code"
+                name="card-billing-address-postal-code"
+                autocomplete="off"
+                placeholder="Postal/zip code"
+            />
+        </div>
+        <br /><br />
+        <button id="card-field-submit-button" type="button">
+            Pay now with Card
+        </button>
+        <button onclick="payCard.close()">cancel</button>
+    </dialog>
+    <!-- <dialog id="fastLane">
+        <iframe src="checkout.html" style="width: 100%; height: 100%;"></iframe>
+    </dialog> -->
+    <script src="app.js"></script>
+</body>
+</html>
+

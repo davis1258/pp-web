@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://www.paypalobjects.com/webstatic/en_US/developer/docs/css/cardfields.css"
+        />
+        <title>PayPal JS SDK Advanced Integration - Checkout Flow</title>
+        <script
+            src="https://www.paypal.com/sdk/js?client-id=AZYsBF1rUMiG3oDkGV5bb0HpPwuM6NXH8DYsSnbEcmqZNE9dj2P_L8_k6K5RyI5DEor7nxjtegNbfnVw&buyer-country=US&currency=USD&components=buttons&enable-funding=venmo,paylater,card"
+            data-sdk-integration-source="developer-studio"
+        ></script>
+        <script>
+            function shouwDialog() {
+                var dialog = document.getElementById('payCard');
+                dialog.showModal();
+            }
+            function shouwCustomer() {
+                var dialog = document.getElementById('payCustomerId');
+                dialog.showModal();
+            }
+            function getClientToken() {
+                getToken();
+            }
+            function openCart() {
+                window.open("newCart.html");
+            }
+            function saveCards() {
+                createOrderSaveCards();
+            }
+            function payId() {
+                payByCustomerId();
+            }
+        </script>
+        <!-- <script defer="" src="bundle.js"></script> -->
+        <!-- <script
+  src="https://www.sandbox.paypal.com/sdk/js?client-id=AZYsBF1rUMiG3oDkGV5bb0HpPwuM6NXH8DYsSnbEcmqZNE9dj2P_L8_k6K5RyI5DEor7nxjtegNbfnVw&components=buttons%2Cfastlane"
+  data-sdk-client-token="eyJraWQiOiJkMTA2ZTUwNjkzOWYxMWVlYjlkMTAyNDJhYzEyMDAwMiIsInR5cCI6IkpXVCIsImFsZyI6IkVTMjU2In0.eyJpc3MiOiJodHRwczovL2FwaS5zYW5kYm94LnBheXBhbC5jb20iLCJzdWIiOiJaNTlZUTQ0RFpGVTdZIiwiYWNyIjpbImNsaWVudCJdLCJzY29wZSI6WyJCcmFpbnRyZWU6VmF1bHQiXSwib3B0aW9ucyI6e30sImF6IjoiY2NnMTguc2xjIiwiZXh0ZXJuYWxfaWQiOlsiUGF5UGFsOlo1OVlRNDREWkZVN1kiLCJCcmFpbnRyZWU6OGJ6aGprbXluN2NtbW54ZCJdLCJleHAiOjE3Mzg1OTQ2NzcsImlhdCI6MTczODU5Mzc3NywianRpIjoiVTJBQUxsSXBLSmtpakJyLUVMVUJSVE9rb2F2aHRzZmp6WHBLN21GdG5heTF2OVlXWXFkc2k0akhuS1AwS1JpWlkzUldBNFp2M2wyLWpjNTM4YjVXVUZSb3g2Q1U1WWthal9ZdDlSSENTcUNTdDVLSGtTRWNCWWZ1anI5OHFMZlEifQ.Ayf8LVHKa18xdrqHg__A2oj6lZBgFlX0KmKgW7yyMN-Z--KfohXAvCDtTETKDlC0rR10woc3Ftek2U3kI2XcIw"
+  data-sdk-integration-source="developer-studio"
+  defer
+></script> -->
+<style>
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(2, 400px); /* 两列，每列宽度100px */
+      gap: 300px; /* 可选，设置网格项之间的间隔 */
+      justify-content: center;/*  可选，设置网格项在主轴上的对齐方式 */
+      /* align-items: center; 可选，设置网格项在交叉轴上的对齐方式 */
+    }
+    .grid-container div {
+      text-align: center;
+    }
+    .left-div {
+        display: block;
+        text-align: left !important;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .bold-text {
+        font-weight: bold;
+        font-size: 20px;
+    }
+    .bg-gray-300 {
+        --tw-bg-opacity: 1;
+        background-color: rgb(209 213 219 / 1);
+        background-color: rgb(209 213 219 / var(--tw-bg-opacity, 1));
+    }
+    .rounded-full {
+        border-radius: 9999px;
+        margin-right: 0.5rem;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        width: auto;
+    }
+    li {
+        float: left;
+        list-style: none;
+        border: 1px solid #504d4d;
+    }
+    .bg-blue {
+        width: 4rem;
+        height: 4rem;
+        top: 2rem;
+        right: 2rem;
+        position: absolute;
+        box-sizing: inherit;
+        padding: 0.5rem;
+        padding-left: 0.5rem;
+        background-color: rgb(59 130 246 / 0.5);
+    }
+    .button {
+        width: 300px;
+        background-color: #ffc439;
+    }
+    input{
+            font-size: "16px";
+            font-family: "courier, monospace";
+            font-weight: "lighter";
+            color: "#ccc";
+        }
+    .invalid{ color: "purple" }
+  </style>
+ </head>
+ <body>
+    <div>
+        <div id="Bar3IconContainer" class=" bg-blue rounded-full"
+          aria-label="View Shopping Cart" data-mui-internal-clone-element="true" onclick="openCart()"><svg
+            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" aria-hidden="true" data-slot="icon" >
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z">
+            </path>
+          </svg></div>
+      </div>
+    <div id="root" class="grid-container">
+        <div class="left-div">
+            <img src="./image/mockup-5206355_960_720.jpg" width="500px" height="500px" alt="Product Image">
+            <ul style="display: grid;grid-template-columns:auto; display: flex; /* 可选，设置网格项之间的间隔 */">
+                <li ><img src="./image/mockup-5206355_960_720.jpg" width="100px" height="100px" alt="Product Image"></li>
+                <li ><img src="./image/mockup-5206355_960_720.jpg" width="100px" height="100px" alt="Product Image"></li>
+                <li ><img src="./image/mockup-5206355_960_720.jpg" width="100px" height="100px" alt="Product Image"></li>
+                <li ><img src="./image/mockup-5206355_960_720.jpg" width="100px" height="100px" alt="Product Image"></li>
+                <li ><img src="./image/mockup-5206355_960_720.jpg" width="100px" height="100px" alt="Product Image"></li>
+            </ul>
+            <button class="button" onclick="">Add To Cart</button>
+        </div>
+        <div style="width: 400px;text-align: left;">
+            <h2 class="text-2xl font-bold mb-2" >Product Name</h2>
+            <p class="text-gray-600 text-sm mb-4">Children's Wear All in One Set!</p>
+            <div class="left-div"><span class="bold-text">Price:</span><span>$100</span>
+                <span class="bold-text">&nbsp;&nbsp;&nbsp;&nbsp;Availability:</span><span class="text-gray-600">In Stock</span>
+            </div>
+            <div class="left-div">
+                <span class="bold-text">Select Color:</span>
+                <select >
+                    <option selected>Gray</option>
+                    <option selected>Red</option>
+                    <option selected>Blue</option>
+                    <option selected>Yellow</option>
+                </select>
+            </div>
+            <div class="left-div"><span class="bold-text">Select Size:</span>
+                <div class="flex items-center mt-2"><button
+                    class="bg-gray-300 rounded-full"
+                    value="S">S</button><button
+                    class="bg-gray-300 rounded-full"
+                    value="M">M</button><button
+                    class="bg-gray-300 rounded-full"
+                    value="L">L</button><button
+                    class="bg-gray-300 rounded-full"
+                    value="XL">XL</button><button
+                    class="bg-gray-300 rounded-full"
+                    value="XXL">XXL</button></div>
+            </div>
+            <div  class="left-div"><span class="bold-text">Product Description:</span>
+                <p class="text-gray-600 text-sm mt-2">Children, toddlers and babies wear should be functional (easy to
+                  put on), cute (colors), gentle and smooth (quality of fabrics), easy to maintain (care label,
+                  dimensional stability, etc), and have a good ratio of price to quality.</p>
+            </div>
+            <div  class="left-div">
+                <div id="paypal-button-container" style="width: 300px;"></div>
+                <br />
+                <div class="left-div" ><button class="button" onclick="shouwDialog()">Save Cards</button></div>
+                <div class="left-div" ><button class="button" onclick="shouwCustomer()">Pay By Customer Id</button></div>
+                <div class="left-div" ><button class="button" onclick="getClientToken()">FastLane</button></div>
+            </div>
+            </div>
+        </div>
+    </div>
+    <div id="buttons-container" class="buttons-container"></div>
+    <div id="paypal-button-container" style="width: 300px;"></div>
+    <!-- Containers for Card Fields hosted by PayPal -->
+    <div id="card-form" class="card_container">
+        
+    </div>
+    <p id="result-message"></p>
+
+    <dialog id="payCustomerId">
+        <div>
+            <input
+            type="text"
+            id="customer-id"
+            name="customer-id"
+            autocomplete="off"
+            placeholder="Customer Id"
+            value="9lh22083da350345a"
+        />
+        </div>
+        <br /><br />
+        <button id="customer-id-submit-button" type="button" onclick="payId()">
+            Pay
+        </button>
+        <button onclick="payCustomerId.close()">cancel</button>
+    </dialog>
+ 
+    <dialog id="payCard">
+        <div>
+            <input
+            type="text"
+            id="card-name-field-container"
+            name="card-name-field-container"
+            autocomplete="off"
+            placeholder="Cardholder Name (optional)"
+            value="Firstname Lastname"
+        />
+        </div>
+        <div >
+            <input
+            type="text"
+            id="card-number-field-container"
+            name="card-number-field-container"
+            autocomplete="off"
+            placeholder="Card number"
+            value="4111111111111111"
+        />
+        </div>
+        <div>
+            <input
+            type="text"
+            id="card-expiry-field-container"
+            name="card-expiry-field-container"
+            autocomplete="off"
+            placeholder="MM /YY"
+            value="2026-02"
+        />
+        </div>
+        <div>
+            <input
+            type="text"
+            id="card-cvv-field-container"
+            name="card-cvv-field-container"
+            autocomplete="off"
+            placeholder="CVV"
+            value="123"
+        />
+       </div>
+
+        
+        <div>
+            <label for="card-billing-address-line-1">Billing Address</label>
+            <input
+                type="text"
+                id="card-billing-address-line-1"
+                name="card-billing-address-line-1"
+                autocomplete="off"
+                placeholder="Address line 1"
+                value="2211 N First Street"
+            />
+        </div>
+        <div>
+            <input
+                type="text"
+                id="card-billing-address-line-2"
+                name="card-billing-address-line-2"
+                autocomplete="off"
+                placeholder="Address line 2"
+                value="Building 17"
+            />
+        </div>
+        <div>
+            <input
+                type="text"
+                id="card-billing-address-admin-area-line-1"
+                name="card-billing-address-admin-area-line-1"
+                autocomplete="off"
+                placeholder="Admin area line 1"
+                value="CA"
+            />
+        </div>
+        <div>
+            <input
+                type="text"
+                id="card-billing-address-admin-area-line-2"
+                name="card-billing-address-admin-area-line-2"
+                autocomplete="off"
+                placeholder="Admin area line 2"
+                value="San Jose"
+            />
+        </div>
+        <div>
+            <input
+                type="text"
+                id="card-billing-address-country-code"
+                name="card-billing-address-country-code"
+                autocomplete="off"
+                placeholder="Country code"
+                value="US"
+            />
+        </div>
+        <div>
+            <input
+                type="text"
+                id="card-billing-address-postal-code"
+                name="card-billing-address-postal-code"
+                autocomplete="off"
+                placeholder="Postal/zip code"
+                value="95131"
+            />
+        </div>
+        <br /><br />
+        <button id="card-field-submit-button" type="button" onclick="saveCards()">
+            Pay And Save Card
+        </button>
+        <button onclick="payCard.close()">cancel</button>
+    </dialog>
+    <!-- <dialog id="fastLane">
+        <iframe src="checkout.html" style="width: 100%; height: 100%;"></iframe>
+    </dialog> -->
+    <script src="app.js"></script>
+</body>
+</html>
+
