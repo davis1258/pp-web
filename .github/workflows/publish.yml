@@ -5,25 +5,26 @@ name: pp-deploy
 on:
   push:
     branches:
-      - main # 这里修改为你要部署的分支
+      - main  # 修改为你的主分支名称，比如master或main
 
 jobs:
-  build - and - deploy:
-    runs - on: ubuntu - latest
+  publish-npm:
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v2
-      - name: Use Node.js
-        uses: actions/setup - node@v1
+ 
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
         with:
-          node - version: '20' # 根据你的项目需求修改版本
-      - name: Build
-        run: |
-          npm install
-          npm run build # 如果你的项目有构建脚本，这里修改为实际的构建命令
-      - name: Deploy
-        uses: JamesIves/github - pages - deployment - action@releases/v3
-        with:
-          ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh - pages # 部署到gh - pages分支
-          FOLDER: dist # 如果你的构建输出在其他目录，修改为实际目录
+          node-version: '20'  # 使用你需要的Node.js版本
+          registry-url: 'https://npm.pkg.github.com/'  # 设置GitHub Packages的注册表URL
+          scope: '@your-org-or-username'  # 指定作用域，如果你的包名是@your-org/package，则需要此处设置@your-org
+ 
+      - name: Install dependencies
+        run: npm ci
+ 
+      - name: Publish package
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 使用GitHub的内置token来认证
