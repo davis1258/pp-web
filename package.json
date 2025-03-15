@@ -1,17 +1,29 @@
 {
-    "name": "paypal-advanced-integration-frontend-html",
-    "version": "1.0.0",
-    "private": true,
-    "type": "module",
-    "scripts": {
-        "build": "vite build",
-        "preview": "vite preview",
-        "start": "vite",
-        "format": "npx prettier --write **/*.{js,md}",
-        "format:check": "npx prettier --check **/*.{js,md}"
-    },
-    "devDependencies": {
-        "dotenv": "^16.4.5",
-        "vite": "^5.4.2"
-    }
+  "name": "paypal-advanced-integration-frontend-html",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "vite",
+    "format": "npx prettier --write **/*.{js,md}",
+    "format:check": "npx prettier --check **/*.{js,md}"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.5",
+    "vite": "^5.4.2"
+  },
+  "description": "## Getting Started",
+  "main": "vite.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davis1258/pp-web.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/davis1258/pp-web/issues"
+  },
+  "homepage": "https://github.com/davis1258/pp-web#readme"
 }
